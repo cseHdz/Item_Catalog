@@ -31,6 +31,8 @@ class Category(Base):
 class CategoryItem(Base):
     __tablename__ = 'category_item'
 
+    creation_date = Column(datetime, nullable = False)
+    last_updated = Column (datetime, nullable = False)
     title = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
