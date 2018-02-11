@@ -1,7 +1,8 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+
 
 Base = declarative_base()
 
@@ -31,10 +32,10 @@ class Category(Base):
 class CategoryItem(Base):
     __tablename__ = 'category_item'
 
-    creation_date = Column(datetime, nullable = False)
-    last_updated = Column (datetime, nullable = False)
-    title = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
+    creation_date = Column(DateTime, default=func.now())
+    last_updated = Column (DateTime, nullable = False)
+    title = Column(String(80), nullable=False)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
