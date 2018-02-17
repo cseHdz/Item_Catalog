@@ -1,0 +1,39 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class="container padding-top padding-bottom">
+	<div class="col-md-12 main-container">
+		<div class="col-md-3 padding-left inline-content max-height dividing-line">
+			<div class="row padding-right">
+				<h2 class="title center-vertical">Categories</h2>
+			</div>
+			<div class="row center padding-top">
+				{% for category in categories %}
+					<a href = "{{url_for('showCategoryCatalog', category_title = category.title)}}">
+							<h3>{{category.title}}</h3>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="col-md-8 padding-left inline-content max-height">
+			<div class="row padding-left">
+				<a href = "{{url_for('newItem')}}"<>
+					<h3 class="center-vertical">Add Item</h3>
+				</a>
+			</div>
+			<div class="row padding-left">
+				<h2 class="title center-vertical paddding-left">Latest Items</h2>
+			</div>
+			<div class="row center padding-top padding-left">
+				{% for item in recent_items %}
+					<a href = "{{url_for('showItemDetails', category_title = item.getCategoryName, item_title = item.title)}}">
+							<h3>{{item.title}} ({{item.category_id}})</h3>
+					</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

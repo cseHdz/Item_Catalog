@@ -34,7 +34,7 @@ class CategoryItem(Base):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, default=func.now())
-    last_updated = Column (DateTime, nullable = False)
+    last_updated = Column (DateTime, default=func.now())
     title = Column(String(80), nullable=False)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
@@ -51,6 +51,10 @@ class CategoryItem(Base):
             'id': self.id,
         }
 
+    @property
+    def getCategoryName(self):
+        """Return the category name form relationship"""
+        return self.category.title
 
 engine = create_engine('sqlite:///item_catalog.db')
 
