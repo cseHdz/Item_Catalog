@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship, column_property
+from sqlalchemy import create_engine, select
 
 
 Base = declarative_base()
@@ -19,6 +19,7 @@ class Category(Base):
 
     id = Column(Integer, primary_key=True)
     title = Column(String(250), nullable=False)
+    items = relationship("CategoryItem", back_populates="category")
 
     @property
     def serialize(self):
@@ -38,9 +39,14 @@ class CategoryItem(Base):
     title = Column(String(80), nullable=False)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship(Category)
+    category = relationship (Category, back_populates="items")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+
+    category_name= column_property (
+        select([Category.title]).\
+        where(Category.id==category_id))
+
 
     @property
     def serialize(self):
@@ -51,10 +57,6 @@ class CategoryItem(Base):
             'id': self.id,
         }
 
-    @property
-    def getCategoryName(self):
-        """Return the category name form relationship"""
-        return self.category.title
 
 engine = create_engine('sqlite:///item_catalog.db')
 

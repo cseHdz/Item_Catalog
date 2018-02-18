@@ -2,8 +2,8 @@
 #
 # Item catalog Flask application
 
-from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
-from flask import make_response
+from flask import Flask, render_template, request, redirect, url_for
+from flask import make_response, jsonify, flash
 from flask import session as login_session
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
@@ -84,14 +84,36 @@ def gdisconnect():
     # Only disconnect a connected user.
     return None
 
+
+# Disconnect based on provider
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+            del login_session['access_token']
+        del login_session['username']
+        del login_session['email']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('showCategories'))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('showRestaurants'))
+
+
 # Home page for Catalog App
 @app.route('/')
 @app.route('/catalog')
 def showAllCategories():
 # Display all categories in ascending order
     categories = db_session.query(Category).order_by(asc(Category.title))
-    recent_items = db_session.query(CategoryItem).order_by(desc(CategoryItem.last_updated)).limit(7).all()
-    return render_template('catalog.html', categories=categories, recent_items=recent_items)
+    recent_items = db_session.query(CategoryItem).order_by(
+                   desc(CategoryItem.last_updated)).limit(7).all()
+    return render_template('catalog.html', categories=categories,
+                           recent_items=recent_items)
 
 
 # Display the catalog for a given category
@@ -114,7 +136,7 @@ def showItemDetails(category_title, item_title):
 
 # TODO: develop catalog template
     return render_template('categoryCatalog.html',
-                            items=items, category=category)
+                            item=item, category=category)
 
 
 # Edit the details for a specific item
@@ -163,26 +185,6 @@ def catelogJSON():
                 category_id=category.id).all()
         category.append = ([category.serialize,[item.serialize for item in items]])
     return jsonify(catalog)
-
-
-# Disconnect based on provider
-@app.route('/disconnect')
-def disconnect():
-    if 'provider' in login_session:
-        if login_session['provider'] == 'google':
-            gdisconnect()
-            del login_session['gplus_id']
-            del login_session['access_token']
-        del login_session['username']
-        del login_session['email']
-        del login_session['user_id']
-        del login_session['provider']
-        flash("You have successfully been logged out.")
-        return redirect(url_for('showCategories'))
-    else:
-        flash("You were not logged in")
-        return redirect(url_for('showRestaurants'))
-
 
 
 if __name__ == '__main__':

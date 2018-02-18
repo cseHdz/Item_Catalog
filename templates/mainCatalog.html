@@ -1,0 +1,21 @@
+{%extends "catalog.html"}
+
+{% block list %}
+  <div class="row padding-left">
+    <a href = "{{url_for('newItem')}}"<>
+      <h3 class="center-vertical">Add Item</h3>
+    </a>
+  </div>
+  <div class="row padding-left">
+    <h2 class="title center-vertical paddding-left">Latest Items</h2>
+  </div>
+  <div class="row center padding-top padding-left">
+    {% for item in recent_items %}
+
+      <a href = "{{url_for('showItemDetails', category_title = item.category_name, item_title = item.title)}}">
+          <h3>{{item.title}} ({{item.category_id (item.category_name)}})</h3>
+      </a>
+    {% endfor %}
+  </div>
+
+{% endblock %}
