@@ -141,14 +141,14 @@ def showItemDetails(category_title, item_title):
 
 # Edit the details for a specific item
 @app.route('/catalog/<item_title>/edit')
-def editItem(item):
+def editItem(item_title):
 
     return nil
 
 
 # Delete the details for a specific item
 @app.route('/catalog/<item_title>/delete')
-def deleteItem(item):
+def deleteItem(item_title):
 
     return nil
 
