@@ -25,11 +25,18 @@ h3 {
 	font-size: 20px;
 }
 
-p {
+h4 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	color: #ff0000;
 	font-weight: 200;
-	font-size: 10px;
+	font-size: 15px;
+}
+
+p {
+	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
+	color: #000000;
+	font-weight: 200;
+	font-size: 15px;
 }
 
 a {
@@ -44,7 +51,7 @@ body {
 
 .dividing-line {
 	border-right: 2px solid;
-	border-color: rgba(229, 229,229, 0.4);
+	border-color: rgba(229,229,229,0.4);
 }
 
 .inline-content {
@@ -71,7 +78,6 @@ body {
 	min-height = 40px;
 	padding-top: 20px;
 	padding-bottom: 20px;
-	display:flex;
 }
 
 .margin-right {
@@ -98,6 +104,10 @@ body {
 	padding: 0;
 }
 
+.margin-none {
+	margin: 0 0 0 0;
+}
+
 .top-menu {
   box-shadow: 0 5px 8px rgba(0, 0, 0, 0.26);
   height: 80px;
@@ -109,6 +119,10 @@ body {
 .heading {
 	padding-left: 5%;
 	height: 100%;
+}
+
+.flex {
+	display: flex;
 }
 
 .center {
@@ -125,4 +139,14 @@ body {
 .center-vertical {
 	vertical-align: middle;
 	margin: 0 0 0 0;
+}
+
+.CRUD-link {
+	margin-bottom: 0;
+	padding-top: 3px;
+}
+
+.lightly-padded {
+	padding-left: 3px;
+	padding-right: 3px;
 }

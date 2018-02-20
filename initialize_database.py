@@ -16,136 +16,223 @@ test_user = User(name="Test User", email="user@catalog_app.com")
 session.add(test_user)
 session.commit()
 
+# Add some items - Soccer
+category1 = Category(title="Soccer")
 
-# Add new categories
-categories = [Category(title="Soccer"),
-              Category(title="Basketball"),
-              Category(title="Baseball"),
-              Category(title="Frisbee"),
-              Category(title="Snowboarding"),
-              Category(title="Rock Climbing"),
-              Category(title="Foosball"),
-              Category(title="Skating"),
-              Category(title="Hockey")]
+session.add (category1)
+session.commit()
 
+citem1 = CategoryItem(title = "Nike Soccer Ball",
+       description = "A professional soccer ball with FIFA standard size (No. 5).",
+       category = category1,
+       user = test_user)
 
-session.bulk_save_objects(categories)
+session.add(citem1)
+session.commit()
+
+citem2 = CategoryItem(title = "Goalie Gloves",
+       description = "Medium size soccer goalie gloves.",
+       category = category1,
+       user = test_user)
+
+session.add(citem2)
+session.commit()
+
+citem3 = CategoryItem(title = "Sheen Guards",
+       description = "Adult size sheen guards.",
+       category = category1,
+       user = test_user)
+
+session.add(citem3)
+session.commit()
+
+citem4 = CategoryItem(title = "Official TFC Fan Scarf",
+       description = "TFC Season ticket holder scarf for 2017-2018 Season.",
+       category = category1,
+       user = test_user)
+
+session.add(citem4)
 session.commit()
 
 
-# Add some items - Soccer
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Nike Soccer Ball",
-                  description = "A professional soccer ball with FIFA standard size (No. 5).",
-                  category = categories[0],
-                  user = test_user),
-             dict(title = "Goalie Gloves",
-                   description = "Medium size soccer goalie gloves.",
-                   category = categories[0],
-                   user = test_user),
-             dict(title = "Sheen Guards",
-                  description = "Adult size sheen guards.",
-                  category = categories[0],
-                  user = test_user),
-             dict(title = "Official TFC Fan Scarf",
-                  description = "TFC Season ticket holder scarf for 2017-2018 Season.",
-                  category = categories[0],
-                  user = test_user)])
-
-
 # Add some items - Basketball
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Jordans",
-                  description = "Limited Edition Jordan Basketball Shoes.",
-                  category = categories[1],
-                  user = test_user),
-             dict(title = "Toronto Raptors Jersey",
-                   description = "2017 Jersey for the Toronto Raptors.",
-                   category = categories[1],
-                   user = test_user),
-             dict(title = "Basketball",
-                  description = "A professional basketball",
-                  category = categories[1],
-                  user = test_user)])
+category2 = Category(title="Basketball")
+
+session.add (category2)
+session.commit()
+
+citem5 = CategoryItem(title = "Jordans",
+       description = "Limited Edition Jordan Basketball Shoes.",
+       category = category2,
+       user = test_user)
+
+session.add(citem5)
+session.commit()
+
+citem6 = CategoryItem(title = "Toronto Raptors Jersey",
+       description = "2017 Jersey for the Toronto Raptors.",
+       category = category2,
+       user = test_user)
+
+session.add(citem6)
+session.commit()
+
+citem7 = CategoryItem(title = "Basketball",
+       description = "A professional basketball",
+       category = category2,
+       user = test_user)
+
+session.add(citem7)
+session.commit()
 
 
 # Add some items - Baseball
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Standard Bat",
-                  description = "MLB Authorized Bat.",
-                  category = categories[2],
-                  user = test_user),
-             dict(title = "Toronto Blue Jays Hat",
-                   description = "206 Post-Season Hat for the Toronto Blue Jays.",
-                   category = categories[2],
-                   user = test_user),
-             dict(title = "Helmet",
-                  description = "An adult sized helmet with NY Yankees theme",
-                  category = categories[2],
-                  user = test_user)])
+category3 = Category(title="Baseball")
+
+session.add (category3)
+session.commit()
+
+citem8 = CategoryItem(title = "Standard Bat",
+       description = "MLB Authorized Bat.",
+       category = category3,
+       user = test_user)
+
+session.add(citem8)
+session.commit()
+
+citem9 = CategoryItem(title = "Toronto Blue Jays Hat",
+       description = "206 Post-Season Hat for the Toronto Blue Jays.",
+       category = category3,
+       user = test_user)
+
+session.add(citem9)
+session.commit()
+
+citem10 = CategoryItem(title = "Helmet",
+       description = "An adult sized helmet with NY Yankees theme",
+       category = category3,
+       user = test_user)
+
+session.add(citem10)
+session.commit()
 
 
 # Add some items - Frisbee
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Ultimate Frisbee - Blue",
-                  description = "An ultimate certified frisbee in color blue.",
-                  category = categories[3],
-                  user = test_user)])
+category4 = Category(title="Frisbee")
+
+session.add (category4)
+session.commit()
+
+citem11 = CategoryItem(title = "Ultimate Frisbee - Blue",
+       description = "An ultimate certified frisbee in color blue.",
+       category = category4,
+       user = test_user)
+
+session.add(citem11)
+session.commit()
 
 
 # Add some items - Snowboarding
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Snowboard",
-                  description = "Regular snowboard.",
-                  category = categories[4],
-                  user = test_user),
-             dict(title = "Snowboarding boots",
-                   description = "Black boots with Canada's olympic theme",
-                   category = categories[4],
-                   user = test_user)])
+category5 = Category(title="Snowboarding")
+
+session.add (category5)
+session.commit()
+
+citem12 = CategoryItem(title = "Snowboard",
+       description = "Regular snowboard.",
+       category = category5,
+       user = test_user)
+
+session.add(citem12)
+session.commit()
+
+citem13 = CategoryItem(title = "Snowboarding boots",
+       description = "Black boots with Canada's olympic theme",
+       category = category5,
+       user = test_user)
+
+session.add(citem13)
+session.commit()
 
 
 # Add some items - Rock Climbing
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Caribiner",
-                  description = "1 Caribiner with a breaking strength of 10,000 lbf",
-                  category = categories[5],
-                  user = test_user),
-             dict(title = "Magnesium",
-                   description = "Ideal for bouldering.",
-                   category = categories[5],
-                   user = test_user)])
+category6 = Category(title="Rock Climbing")
+
+session.add (category6)
+session.commit()
+
+citem14 = CategoryItem(title = "Caribiner",
+       description = "1 Caribiner with a breaking strength of 10,000 lbf",
+       category = category6,
+       user = test_user)
+
+session.add(citem14)
+session.commit()
+
+citem15 = CategoryItem(title = "Magnesium",
+       description = "Ideal for bouldering.",
+       category = category6,
+       user = test_user)
+
+session.add(citem15)
+session.commit()
 
 
 # Add some items - Foosball
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Replacement balls",
-                  description = "Regular sized balls for foosball table",
-                  category = categories[6],
-                  user = test_user)])
+category7 = Category(title="Foosball")
+
+session.add (category7)
+session.commit()
+
+citem16 = CategoryItem(title = "Replacement balls",
+        description = "Regular sized balls for foosball table",
+        category = category7,
+        user = test_user)
+
+session.add(citem16)
+session.commit()
 
 
 # Add some items - Skating
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Women's Ice Skates",
-                  description = "Women's skates for figure skating",
-                  category = categories[7],
-                  user = test_user),
-             dict(title = "Rollerblades",
-                   description = "Hockey style rollerblades with replacement wheels included.",
-                   category = categories[7],
-                   user = test_user)])
+category8 = Category(title="Skating")
+
+session.add (category8)
+session.commit()
+
+citem17 = CategoryItem(title = "Women's Ice Skates",
+        description = "Women's skates for figure skating",
+        category = category8,
+        user = test_user)
+
+session.add(citem17)
+session.commit()
+
+citem18 = CategoryItem(title = "Rollerblades",
+        description = "Hockey style rollerblades with replacement wheels included.",
+        category = category8,
+        user = test_user)
+
+session.add(citem18)
+session.commit()
 
 
 # Add some items - Hockey
-session.bulk_insert_mappings(CategoryItem,
-            [dict(title = "Goalie Outfit",
-                  description = "Regular goalie equiment with Toronto Maple Leaf's theme",
-                  category = categories[8],
-                  user = test_user),
-             dict(title = "Hockey Stick",
-                   description = "Children size hockey stick - pretaped.",
-                   category = categories[8],
-                   user = test_user)])
+category9 = Category(title="Hockey")
+session.add (category9)
+session.commit()
 
+citem19 = CategoryItem(title = "Goalie Outfit",
+       description = "Regular goalie equiment with Toronto Maple Leaf's theme",
+       category = category9,
+       user = test_user)
+
+session.add(citem19)
+session.commit()
+
+citem20 = CategoryItem(title = "Hockey Stick",
+        description = "Children size hockey stick - pretaped.",
+        category = category9,
+        user = test_user)
+
+session.add(citem20)
 session.commit()

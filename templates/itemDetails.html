@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+
+<div class="container padding-top padding-bottom">
+	<div class="col-md-12 main-container">
+		<h2 class="title center-vertical lightly-padded">{{item.title}}</h2>
+		<div class ="row padding-left padding-top">
+			<p>Description: {{item.description}}<p>
+		</div>
+		<div class ="row padding-left">
+			<a href = "{{url_for('editItem', item_title = item.title)}}">
+				<h4 class="CRUD-link">Edit</h4>
+			</a>
+			<span class="lightly-padded">|</span>
+			<a href = "{{url_for('deleteItem', item_title = item.title)}}">
+				<h4 class="CRUD-link"> Delete</h4>
+			</a>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

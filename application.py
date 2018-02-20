@@ -7,7 +7,7 @@ from flask import make_response, jsonify, flash
 from flask import session as login_session
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, CategoryItem
+from database_setup import Base, Category, CategoryItem, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import json
@@ -112,31 +112,31 @@ def showAllCategories():
     categories = db_session.query(Category).order_by(asc(Category.title))
     recent_items = db_session.query(CategoryItem).order_by(
                    desc(CategoryItem.last_updated)).limit(7).all()
-    return render_template('catalog.html', categories=categories,
+    return render_template('mainCatalog.html', categories=categories,
                            recent_items=recent_items)
 
 
 # Display the catalog for a given category
 @app.route('/catalog/<category_title>')
 def showCategoryCatalog(category_title):
+    categories = db_session.query(Category).order_by(asc(Category.title))
     category = db_session.query(Category).filter_by(title=category_title).one()
     items = db_session.query(CategoryItem).filter_by(category_id=category.id)
 
 # TODO: develop catalog template
     return render_template('categoryCatalog.html',
-                            items=items, category=category)
+                            categories=categories, items=items, category=category)
 
 
 # Display the details for a specific item
 @app.route('/catalog/<category_title>/<item_title>')
 def showItemDetails(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
-    item = db_session.query(Category).filter_by(category_id=category.id, title=item_title).one()
+    item = db_session.query(CategoryItem).filter_by(category_id=category.id,
+           title=item_title).one()
     owner = getUserInfo(item.user_id)
 
-# TODO: develop catalog template
-    return render_template('categoryCatalog.html',
-                            item=item, category=category)
+    return render_template('itemDetails.html',item=item)
 
 
 # Edit the details for a specific item

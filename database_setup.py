@@ -45,8 +45,8 @@ class CategoryItem(Base):
 
     category_name= column_property (
         select([Category.title]).\
-        where(Category.id==category_id))
-
+        where(Category.id==category_id).\
+        correlate_except(Category))
 
     @property
     def serialize(self):
