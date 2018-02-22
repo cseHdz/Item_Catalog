@@ -139,23 +139,11 @@ def showItemDetails(category_title, item_title):
     return render_template('itemDetails.html',item=item)
 
 
-# Edit the details for a specific item
-@app.route('/catalog/<item_title>/edit')
-def editItem(item_title):
+# Perform CRUD on a Category Item
+@app.route('/catalog/<item_title>/<activity>', methods=['GET', 'POST'])
+def crudItem(item_title = 'new_item', activity):
 
-    return nil
-
-
-# Delete the details for a specific item
-@app.route('/catalog/<item_title>/delete')
-def deleteItem(item_title):
-
-    return nil
-
-
-# Add a new item
-@app.route('/catalog//new_item', methods=['GET', 'POST'])
-def newItem():
+#TODO: implement CRUD activities
     #if 'username' not in login_session:
         #return redirect('/login')
     # POST - Create new item and redirect back to the Catalog
