@@ -2,7 +2,7 @@
 
 {% block list %}
   <div class="row padding-left">
-    <a href = "{{url_for('crudItem',activity='add')}}">
+    <a href = "{{url_for("newItem")}}">
       <h3 class="center-vertical">Add Item</h3>
     </a>
   </div>
@@ -11,7 +11,7 @@
   </div>
   <div class="row center padding-top padding-left">
     {% for item in items %}
-      <a href = "{{url_for('showItemDetails', category_title = item.category_name, item_title = item.title)}}">
+      <a href = "{{url_for("showItemDetails", category_title = item.category_name, item_title = item.title)}}">
           <h3>{{item.title}} ({{item.category_name}})</h3>
       </a>
     {% endfor %}

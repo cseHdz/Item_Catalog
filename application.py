@@ -139,28 +139,61 @@ def showItemDetails(category_title, item_title):
     return render_template('itemDetails.html',item=item)
 
 
-# Perform CRUD on a Category Item
-@app.route('/catalog/<item_title>/<activity>', methods=['GET', 'POST'])
-def crudItem(item_title = 'new_item', activity):
+# Edit a Category Item
+@app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
+def crudItem(item_title):
+    editedItem = db_session.query(CategoryItem).filter_by(category_id=category.id,
+               title=item_title).one()
+    if request.method == 'POST':
+        if request.form['title']:
+            editedItem.title = request.form['title']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        if request.form['category_title'] != editItem.category_name:
+            newCategory = db_session.query(Category).filter_by(title=request.form['category_title']).one()
+            editedItem.category_id = newCategory.id
+            editItem.category = newCategory
+        session.add(editedItem)
+        session.commit()
+        flash('%s Successfully Edited' % editedItem.title)
+        return redirect(url_for('showItemDetails',editedItem.category_name, editedItem.title))
+    else:
+        return render_template('editCategoryItem.html', item=editedItem)
 
-#TODO: implement CRUD activities
-    #if 'username' not in login_session:
-        #return redirect('/login')
+
+# Edit a Category Item
+@app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
+def crudItem(item_title):
+    itemToDelete = db_session.query(CategoryItem).filter_by(category_id=category.id,
+               title=item_title).one()
+    if request.method == 'POST':
+        session.delete(itemToDelete)
+        session.commit()
+        flash('%s Successfully Deleted' % itemToDelete.title)
+        return redirect(url_for('showAllCategories'))
+    else:
+        return render_template('deleteCategoryItem.html', item=editedItem)
+
+
+# Create a new Category Item
+@app.route('/catalog/newItem', methods=['GET', 'POST'])
+def newItem():
     # POST - Create new item and redirect back to the Catalog
     if request.method == 'POST':
+        category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
         newItem = CategoryItem(
-            latest_update=now(),
-            title=request.form['title'],
-            description= request.form['description'],
-            category_id=category.id,
-            user_id=login_session['user_id'])
+            latest_update = now(),
+            title = request.form['title'],
+            description = request.form['description'],
+            category_id = category.id,
+            user_id = 1)
         db_session.add(newItem)
-        flash('%s (%s) Successfully Created' % newItem.name, category.title)
         db_session.commit()
-        return redirect(url_for('showCategoryCatalog',category))
+        flash('%s (%s) Successfully Created' % newItem.title, category.title)
+        return redirect(url_for('showCategoryCatalog',category.title))
     # GET - Return form for new item Creation
     else:
-        return render_template('newItem.html')
+        return render_template('newCategoryItem.html', item=item)
 
 
 #jsonify support for catalog
