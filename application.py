@@ -141,9 +141,9 @@ def showItemDetails(category_title, item_title):
 
 # Edit a Category Item
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
-def crudItem(item_title):
-    editedItem = db_session.query(CategoryItem).filter_by(category_id=category.id,
-               title=item_title).one()
+def editItem(item_title):
+    editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
+    categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
         if request.form['title']:
             editedItem.title = request.form['title']
@@ -158,21 +158,21 @@ def crudItem(item_title):
         flash('%s Successfully Edited' % editedItem.title)
         return redirect(url_for('showItemDetails',editedItem.category_name, editedItem.title))
     else:
-        return render_template('editCategoryItem.html', item=editedItem)
+        return render_template('editCategoryItem.html', item=editedItem, categories=categories)
 
 
 # Edit a Category Item
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
-def crudItem(item_title):
-    itemToDelete = db_session.query(CategoryItem).filter_by(category_id=category.id,
-               title=item_title).one()
+def deleteItem(item_title):
+    itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
+    categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
         session.delete(itemToDelete)
         session.commit()
         flash('%s Successfully Deleted' % itemToDelete.title)
         return redirect(url_for('showAllCategories'))
     else:
-        return render_template('deleteCategoryItem.html', item=editedItem)
+        return render_template('deleteCategoryItem.html', item=itemToDelete, categories=categories)
 
 
 # Create a new Category Item
@@ -193,7 +193,7 @@ def newItem():
         return redirect(url_for('showCategoryCatalog',category.title))
     # GET - Return form for new item Creation
     else:
-        return render_template('newCategoryItem.html', item=item)
+        return render_template('newCategoryItem.html')
 
 
 #jsonify support for catalog
