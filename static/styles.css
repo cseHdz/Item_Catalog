@@ -1,6 +1,7 @@
 * {
-	font-family: "Helvetica Neue Bold", Roboto, Helvetica, Arial, sans-serif;
-	font-weight: 700;
+	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	color: #000000;
 }
 
 h1 {
@@ -18,7 +19,7 @@ h2 {
 	font-size:30px
 }
 
-h3 {
+h3, label {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	color: #ff0000;
 	font-weight: 200;
@@ -30,13 +31,6 @@ h4 {
 	color: #ff0000;
 	font-weight: 200;
 	font-size: 15px;
-}
-
-label {
-	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
-	font-size: 20px;
-	color: #082d68;
-	font-weight: 200;
 }
 
 p {
@@ -92,11 +86,11 @@ body {
 }
 
 .padding-top {
-	padding-top: 20px;
+	padding-top: 10px;
 }
 
 .padding-bottom {
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 }
 
 .padding-left {
@@ -144,13 +138,8 @@ body {
 }
 
 .center-vertical {
-	vertical-align: middle;
+	align-items: center;
 	margin: 0 0 0 0;
-}
-
-.CRUD-link {
-	margin-bottom: 0;
-	padding-top: 3px;
 }
 
 .lightly-padded {

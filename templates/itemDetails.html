@@ -4,8 +4,13 @@
 
 <div class="container padding-top padding-bottom">
 	<div class="col-md-12 main-container">
-		<h2 class="title center-vertical lightly-padded">{{item.title}}</h2>
-		<div class ="row padding-left padding-top">
+		<div class =" flex row padding-left padding-top">
+			<h2 class = "title center-vertical lightly-padded">{{item.title}} - </h2>
+			<a class = "flex center-vertical" href = "{{url_for("showCategoryCatalog", category_title = item.category_name)}}">
+				<h3 class = "margin-none" class = "lightly-padded">Back to {{item.category_name}}</h3>
+			</a>
+		</div>
+		<div class ="row padding-left padding-top padding-bottom">
 			<p>Description: {{item.description}}<p>
 		</div>
 		<a href="{{url_for("editItem", item_title = item.title)}}"
