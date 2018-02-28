@@ -181,17 +181,20 @@ def newItem():
     # POST - Create new item and redirect back to the Catalog
     categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
-        category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
-        newItem = CategoryItem(
-            last_updated = datetime.datetime.now(),
-            title = request.form['item_title'],
-            description = request.form['description'],
-            category_id = category.id,
-            user_id = 1)
-        db_session.add(newItem)
-        db_session.commit()
-        #flash('%s (%s) Successfully Created' % newItem.title, category.title)
-        return redirect(url_for('showAllCategories'))
+        if db_session.query(CategoryItem).filter_by(title=request.form['item_title']).one():
+            return "<script>function myFunction() {alert('Name already taken. Please select a new name.'); window.history.back();} </script><body onload='myFunction()'>"
+        else:
+            category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
+            newItem = CategoryItem(
+                last_updated = datetime.datetime.now(),
+                title = request.form['item_title'],
+                description = request.form['description'],
+                category_id = category.id,
+                user_id = 1)
+            db_session.add(newItem)
+            db_session.commit()
+            #flash('%s (%s) Successfully Created' % newItem.title, category.title)
+            return redirect(url_for('showAllCategories'))
     # GET - Return form for new item Creation
     else:
         return render_template('newCategoryItem.html', categories=categories)
@@ -207,4 +210,4 @@ def catelogJSON():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='localhost', port=8000)
