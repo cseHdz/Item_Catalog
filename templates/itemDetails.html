@@ -8,15 +8,10 @@
 		<div class ="row padding-left padding-top">
 			<p>Description: {{item.description}}<p>
 		</div>
-		<div class ="row padding-left">
-			<a href = "{{url_for("editItem", item_title = item.title)}}">
-				<h4 class="CRUD-link">Edit</h4>
-			</a>
-			<span class="lightly-padded">|</span>
-			<a href = "{{url_for("deleteItem", item_title = item.title)}}">
-				<h4 class="CRUD-link"> Delete</h4>
-			</a>
-		</div>
+		<a href="{{url_for("editItem", item_title = item.title)}}"
+			 class="btn btn-outline-primary" role="button">Edit</a>
+		<a href="{{url_for("deleteItem", item_title = item.title)}}"
+			 class="btn btn-outline-danger" role="button">Delete</a>
 	</div>
 </div>
 

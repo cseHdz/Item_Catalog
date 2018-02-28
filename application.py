@@ -15,7 +15,7 @@ import httplib2
 import random
 import string
 import requests
-import datetime
+import datetime, time
 
 
 app = Flask(__name__)
@@ -145,18 +145,18 @@ def editItem(item_title):
     editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
     categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
-        if request.form['title']:
-            editedItem.title = request.form['title']
+        if request.form['item_title']:
+            editedItem.title = request.form['item_title']
         if request.form['description']:
             editedItem.description = request.form['description']
-        if request.form['category_title'] != editItem.category_name:
+        if request.form['category_title'] != editedItem.category_name:
             newCategory = db_session.query(Category).filter_by(title=request.form['category_title']).one()
             editedItem.category_id = newCategory.id
             editItem.category = newCategory
-        session.add(editedItem)
-        session.commit()
-        flash('%s Successfully Edited' % editedItem.title)
-        return redirect(url_for('showItemDetails',editedItem.category_name, editedItem.title))
+        db_session.add(editedItem)
+        db_session.commit()
+        #flash('%s Successfully Edited' % editedItem.title)
+        return redirect(url_for("showItemDetails", category_title=editedItem.category_name, item_title=editedItem.title))
     else:
         return render_template('editCategoryItem.html', item=editedItem, categories=categories)
 
@@ -167,9 +167,9 @@ def deleteItem(item_title):
     itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
     categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
-        flash('%s Successfully Deleted' % itemToDelete.title)
+        db_session.delete(itemToDelete)
+        db_session.commit()
+        #flash('%s Successfully Deleted' % itemToDelete.title)
         return redirect(url_for('showAllCategories'))
     else:
         return render_template('deleteCategoryItem.html', item=itemToDelete, categories=categories)
@@ -179,32 +179,29 @@ def deleteItem(item_title):
 @app.route('/catalog/newItem', methods=['GET', 'POST'])
 def newItem():
     # POST - Create new item and redirect back to the Catalog
+    categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
         category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
         newItem = CategoryItem(
-            latest_update = now(),
-            title = request.form['title'],
+            last_updated = datetime.datetime.now(),
+            title = request.form['item_title'],
             description = request.form['description'],
             category_id = category.id,
             user_id = 1)
         db_session.add(newItem)
         db_session.commit()
-        flash('%s (%s) Successfully Created' % newItem.title, category.title)
-        return redirect(url_for('showCategoryCatalog',category.title))
+        #flash('%s (%s) Successfully Created' % newItem.title, category.title)
+        return redirect(url_for('showAllCategories'))
     # GET - Return form for new item Creation
     else:
-        return render_template('newCategoryItem.html')
+        return render_template('newCategoryItem.html', categories=categories)
 
 
 #jsonify support for catalog
 @app.route('/catalog.json')
 def catelogJSON():
     categories = db_session.query(Category).all()
-    catalog = []
-    for category in categories:
-        items = session.query(CategoryItem).filter_by(
-                category_id=category.id).all()
-        category.append = ([category.serialize,[item.serialize for item in items]])
+    catalog = {'Category':[category.serialize for category in categories]}
     return jsonify(catalog)
 
 

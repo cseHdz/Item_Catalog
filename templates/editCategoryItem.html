@@ -5,14 +5,14 @@
 <div class="container padding-top padding-bottom">
   <div class="col-md-12 main-container">
     <h2 class="title center-vertical lightly-padded">Edit Item</h2>
-    <form action="{{url_for("editItem", item_title = item.title)}}" method="post">
+    <form action="{{url_for("editItem", item_title = item.title)}}" method='POST'>
       <div class="form-group">
         	<label for="item_title">Item Title:</label>
-          <input type="text" class="form-control" id="item_title" name="item_title" placeholder ="{{item.title}}">
+          <input type="text" class="form-control" id="item_title" name="item_title" value ="{{item.title}}">
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea class="form-control" rows="5" id="description" name="description" placeholder ="{{item.description}}"></textarea>
+        <textarea class="form-control" rows="5" id="description" name="description">{{item.description}}</textarea>
       </div>
       <div class="form-group">
         <label for="category_title">Category:</label>
@@ -27,7 +27,8 @@
         </select>
       </div>
       <button type="submit" class="btn btn-outline-primary">Submit</button>
-      <a href="{{url_for("showItemDetails", category_title = item.category_name, item_title = item.title)}}" class="btn btn-outline-danger" role="button">Cancel</a>
+      <a href="{{url_for("showItemDetails", category_title = item.category_name, item_title = item.title)}}"
+         class="btn btn-outline-danger" role="button">Cancel</a>
     </form>
 	</div>
 </div>
