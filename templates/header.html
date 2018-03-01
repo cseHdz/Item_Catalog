@@ -6,7 +6,12 @@
 			</a>
 		</div>
 		<div class="col-md-6 center right-align padding-none">
-				<a class="btn btn-danger login-button" role="button" href="#">Login </a>
+				{% if login_session['username'] %}
+					{% include "login.html" %}
+				{% else %}
+					<a href="{{url_for("disconnect")}}"
+						class="btn btn-danger" role="button">Logout</a>
+				{% endif %}
 		</div>
 	</div>
 </div>
