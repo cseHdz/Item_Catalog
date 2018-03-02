@@ -36,12 +36,8 @@ db_session = DBSession()
 
 # Create anti-forgery state token
 @app.route('/login')
-def showLogin():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in xrange(32))
-    login_session['state'] = state
-    # return "The current session state is %s" % login_session['state']
-    return None
+def login():
+    return signinButton.click()
 
 
 # Enable google login
@@ -50,12 +46,6 @@ def gconnect():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    # Validate state token - Ensure request comes from original source
-    #if request.args.get('state') != login_session['state']:
-    #    response = make_response(json.dumps('Invalid state parameter.'), 401)
-    #    response.headers['Content-Type'] = 'application/json'
-    #    return response
-    # Obtain authorization code
     code = request.data
 
     try:
@@ -131,7 +121,6 @@ def gconnect():
     output += '<h1>Welcome, '
     output += login_session['username']
     output += '!</h1>'
-    #flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
 
@@ -163,8 +152,6 @@ def getUserID(email):
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
-
-
 @app.route('/gdisconnect')
 def gdisconnect():
     # Only disconnect a connected user.
@@ -199,10 +186,10 @@ def disconnect():
         del login_session['email']
         del login_session['user_id']
         del login_session['provider']
-        #flash("You have successfully been logged out.")
+        flash("You have successfully been logged out.")
         return redirect(url_for('showAllCategories'))
     else:
-        #flash("You were not logged in")
+        flash("You were not logged in")
         return redirect(url_for('showAllCategories'))
 
 
@@ -224,8 +211,6 @@ def showCategoryCatalog(category_title):
     categories = db_session.query(Category).order_by(asc(Category.title))
     category = db_session.query(Category).filter_by(title=category_title).one()
     items = db_session.query(CategoryItem).filter_by(category_id=category.id)
-
-# TODO: develop catalog template
     return render_template('categoryCatalog.html',
                             categories=categories, items=items, category=category)
 
@@ -236,16 +221,20 @@ def showItemDetails(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
            title=item_title).one()
-    owner = getUserInfo(item.user_id)
-
-    return render_template('itemDetails.html',item=item)
+    if 'username' not in session or item.user_id != login_session['user_id']:
+        return render_template('itemDetails_public.html',item=item)
+    else:
+        return render_template('itemDetails.html',item=item)
 
 
 # Edit a Category Item
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def editItem(item_title):
+    if 'username' not in session:
+        return redirect (urlfor('login'));
     editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
-    categories = db_session.query(Category).order_by(asc(Category.title))
+    if edited.user_id != login_session['user_id']:
+        redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
     if request.method == 'POST':
         if request.form['item_title']:
             editedItem.title = request.form['item_title']
@@ -257,31 +246,37 @@ def editItem(item_title):
             editItem.category = newCategory
         db_session.add(editedItem)
         db_session.commit()
-        #flash('%s Successfully Edited' % editedItem.title)
+        flash('%s Successfully Edited' % editedItem.title)
         return redirect(url_for("showItemDetails", category_title=editedItem.category_name, item_title=editedItem.title))
     else:
+        categories = db_session.query(Category).order_by(asc(Category.title))
         return render_template('editCategoryItem.html', item=editedItem, categories=categories)
 
 
 # Edit a Category Item
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def deleteItem(item_title):
+    if 'username' not in session:
+        return redirect (urlfor('login'));
     itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
-    categories = db_session.query(Category).order_by(asc(Category.title))
+    if itemToDelete.user_id != login_session['user_id']:
+        redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
     if request.method == 'POST':
         db_session.delete(itemToDelete)
         db_session.commit()
-        #flash('%s Successfully Deleted' % itemToDelete.title)
+        flash('%s Successfully Deleted' % itemToDelete.title)
         return redirect(url_for('showAllCategories'))
     else:
+        categories = db_session.query(Category).order_by(asc(Category.title))
         return render_template('deleteCategoryItem.html', item=itemToDelete, categories=categories)
 
 
 # Create a new Category Item
 @app.route('/catalog/newItem', methods=['GET', 'POST'])
 def newItem():
+    if 'username' not in session:
+        return redirect (urlfor('login'));
     # POST - Create new item and redirect back to the Catalog
-    categories = db_session.query(Category).order_by(asc(Category.title))
     if request.method == 'POST':
         if db_session.query(CategoryItem).filter_by(title=request.form['item_title']).one():
             return "<script>function myFunction() {alert('Name already taken. Please select a new name.'); window.history.back();} </script><body onload='myFunction()'>"
@@ -292,22 +287,39 @@ def newItem():
                 title = request.form['item_title'],
                 description = request.form['description'],
                 category_id = category.id,
-                user_id = 1)
+                user_id = login_session['user_id'])
             db_session.add(newItem)
             db_session.commit()
-            #flash('%s (%s) Successfully Created' % newItem.title, category.title)
+            flash('%s (%s) Successfully Created' % newItem.title, category.title)
             return redirect(url_for('showAllCategories'))
     # GET - Return form for new item Creation
     else:
+        categories = db_session.query(Category).order_by(asc(Category.title))
         return render_template('newCategoryItem.html', categories=categories)
 
 
-#jsonify support for catalog
-@app.route('/catalog.json')
-def catelogJSON():
+#JSON Support
+@app.route('/catalog/JSON')
+def catalogJSON():
     categories = db_session.query(Category).all()
     catalog = {'Category':[category.serialize for category in categories]}
     return jsonify(catalog)
+
+
+#JSON support for categories
+@app.route('/catalog/<category_title>/JSON')
+def categoryJSON(category_title):
+    category = db_session.query(Category).filter_by(title=category_title).one()
+    return jsonify (category)
+
+
+#JSON support for individual items
+@app.route('/catalog/<category_title>/<item_title>/JSON')
+def itemJSON():
+    category = db_session.query(Category).filter_by(title=category_title).one()
+    item = db_session.query(CategoryItem).filter_by(category_id=category.id,
+           title=item_title).one()
+    return jsonify(item)
 
 
 if __name__ == '__main__':

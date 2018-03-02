@@ -5,13 +5,18 @@
 				<h1>Catalog App</h1>
 			</a>
 		</div>
-		<div class="col-md-6 center right-align padding-none">
-				{% if login_session['username'] %}
-					{% include "login.html" %}
-				{% else %}
-					<a href="{{url_for("disconnect")}}"
-						class="btn btn-danger" role="button">Logout</a>
-				{% endif %}
-		</div>
+		{% if 'username' not in session %}
+			<div class="col-md-6 center right-align padding-none">
+				{% include "login.html" %}
+			</div>
+		{% else %}
+			<div class="col-md-5 center right-align padding-none">
+				<h5 class = "margin-none"> Logged in as <br> {{session['username']}} </h5>
+			</div>
+			<div class="col-md-1 center right-align padding-none">
+				<a href="{{url_for("disconnect")}}"
+					class="btn btn-danger" role="button">Logout</a>
+			</div>
+		{% endif %}
 	</div>
 </div>
