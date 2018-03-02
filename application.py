@@ -201,8 +201,9 @@ def showAllCategories():
     categories = db_session.query(Category).order_by(asc(Category.title))
     recent_items = db_session.query(CategoryItem).order_by(
                    desc(CategoryItem.last_updated)).limit(7).all()
-    return render_template('mainCatalog.html', categories=categories,
-                           recent_items=recent_items)
+    return render_template('mainCatalog.html',
+                            categories=categories,
+                            recent_items=recent_items)
 
 
 # Display the catalog for a given category
@@ -210,9 +211,11 @@ def showAllCategories():
 def showCategoryCatalog(category_title):
     categories = db_session.query(Category).order_by(asc(Category.title))
     category = db_session.query(Category).filter_by(title=category_title).one()
-    items = db_session.query(CategoryItem).filter_by(category_id=category.id)
+    items = db_session.query(CategoryItem).filter_by(
+            category_id=category.id).order_by(asc(CategoryItem.title))
     return render_template('categoryCatalog.html',
-                            categories=categories, items=items, category=category)
+                            categories=categories,
+                            items=items, category=category)
 
 
 # Display the details for a specific item
@@ -221,7 +224,7 @@ def showItemDetails(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
            title=item_title).one()
-    if 'username' not in session or item.user_id != login_session['user_id']:
+    if 'username' not in login_session or item.user_id != login_session['user_id']:
         return render_template('itemDetails_public.html',item=item)
     else:
         return render_template('itemDetails.html',item=item)
@@ -230,8 +233,8 @@ def showItemDetails(category_title, item_title):
 # Edit a Category Item
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def editItem(item_title):
-    if 'username' not in session:
-        return redirect (urlfor('login'));
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
     if edited.user_id != login_session['user_id']:
         redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
@@ -256,8 +259,8 @@ def editItem(item_title):
 # Edit a Category Item
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def deleteItem(item_title):
-    if 'username' not in session:
-        return redirect (urlfor('login'));
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
     if itemToDelete.user_id != login_session['user_id']:
         redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
@@ -274,11 +277,12 @@ def deleteItem(item_title):
 # Create a new Category Item
 @app.route('/catalog/newItem', methods=['GET', 'POST'])
 def newItem():
-    if 'username' not in session:
-        return redirect (urlfor('login'));
+    if 'username' not in login_session:
+        return redirect(url_for('login'))
     # POST - Create new item and redirect back to the Catalog
     if request.method == 'POST':
-        if db_session.query(CategoryItem).filter_by(title=request.form['item_title']).one():
+        item = db_session.query(CategoryItem).filter_by(title=request.form['item_title']).scalar()
+        if (item):
             return "<script>function myFunction() {alert('Name already taken. Please select a new name.'); window.history.back();} </script><body onload='myFunction()'>"
         else:
             category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
@@ -290,7 +294,6 @@ def newItem():
                 user_id = login_session['user_id'])
             db_session.add(newItem)
             db_session.commit()
-            flash('%s (%s) Successfully Created' % newItem.title, category.title)
             return redirect(url_for('showAllCategories'))
     # GET - Return form for new item Creation
     else:

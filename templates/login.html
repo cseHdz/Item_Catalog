@@ -1,6 +1,6 @@
   <!-- GOOGLE PLUS SIGN IN-->
   <div id="signinButton">
-    <span class="g-signin2"
+    <span class="g-signin"
       data-scope="openid email"
       data-clientid="1015118172588-s28j020n14s031u9mhq3pn6ecbglrsse.apps.googleusercontent.com"
       data-redirecturi="postmessage"
@@ -27,7 +27,9 @@
         success: function(result) {
           // Handle or verify the server response if necessary.
           if (result) {
-            window.location.href = "/catalog";
+             setTimeout(function() {
+              window.location.href = "/catalog";
+            }, 2000);
           } else if (authResult['error']) {
             console.log('There was an error: ' + authResult['error']);
           } else {

@@ -1,11 +1,13 @@
 {% extends "catalog.html" %}
 
 {% block list %}
-  <div class="row padding-left">
-    <a href = "{{url_for("newItem")}}">
-      <h3 class="center-vertical">Add Item</h3>
-    </a>
-  </div>
+  {% if 'username' not in login_session %}
+    <div class="row padding-left">
+      <a href = "{{url_for("newItem")}}">
+        <h3 class="center-vertical">Add Item</h3>
+      </a>
+    </div>
+  {% endif %}
   <div class="row padding-left">
     <h2 class="title center-vertical paddding-left">Latest Items</h2>
   </div>
