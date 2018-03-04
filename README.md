@@ -22,7 +22,7 @@ The tasks covered by the app are:
 1. Display all current categories with the latest added items.
 2. Show category specific catalogs with all the items available for that category.
 3. Display information for specific items.
-4. After logging in, a user has the ability to add, update, or delete item information.
+4. **After logging in**, a user has the ability to add, update, or delete item information. Functions are disabled if user is not logged in. To test functions, create a new item.
 5. Users can only modify those items that they themselves have created.
 6. Provides a JSON endpoint for the entire Catalog, Category Specific Catalogs and Individual Items.
 
