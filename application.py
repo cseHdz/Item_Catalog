@@ -34,12 +34,6 @@ DBSession = sessionmaker(bind=engine)
 db_session = DBSession()
 
 
-# Create anti-forgery state token
-@app.route('/login')
-def login():
-    return signinButton.click()
-
-
 # Enable google login
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -234,7 +228,7 @@ def showItemDetails(category_title, item_title):
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def editItem(item_title):
     if 'username' not in login_session:
-        return redirect(url_for('login'))
+        return redirect(urlfor('showAllCategories'))
     editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
     if edited.user_id != login_session['user_id']:
         redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
@@ -260,7 +254,7 @@ def editItem(item_title):
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def deleteItem(item_title):
     if 'username' not in login_session:
-        return redirect(url_for('login'))
+        return redirect(urlfor('showAllCategories'))
     itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
     if itemToDelete.user_id != login_session['user_id']:
         redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
@@ -278,7 +272,7 @@ def deleteItem(item_title):
 @app.route('/catalog/newItem', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
-        return redirect(url_for('login'))
+        return redirect(urlfor('showAllCategories'))
     # POST - Create new item and redirect back to the Catalog
     if request.method == 'POST':
         item = db_session.query(CategoryItem).filter_by(title=request.form['item_title']).scalar()

@@ -166,3 +166,7 @@ body {
 .login-button {
 	min-width: 100px;
 }
+
+.hidden {
+	display: none;
+}
