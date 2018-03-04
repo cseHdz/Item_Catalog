@@ -140,9 +140,11 @@ def getUserInfo(user_id):
 
 # Retrieve a user record from db if email found
 def getUserID(email):
-    try:
-        user = db_session.query(User).filter_by(email=email).one()
+    user = db_session.query(User).filter_by(email=email).scalar()
+    if (user):
         return user.id
+    else:
+        return None
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
@@ -219,8 +221,8 @@ def showItemDetails(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
                                                     title=item_title).one()
-    if 'username' not in login_session
-    or item.user_id != login_session['user_id']:
+    if 'username' not in login_session or\
+       item.user_id != login_session['user_id']:
         return render_template('itemDetails_public.html', item=item)
     else:
         return render_template('itemDetails.html', item=item)
