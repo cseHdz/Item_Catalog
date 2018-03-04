@@ -307,16 +307,16 @@ def catalogJSON():
 @app.route('/catalog/<category_title>/JSON')
 def categoryJSON(category_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
-    return jsonify (category)
+    return jsonify (category.serialize)
 
 
 #JSON support for individual items
 @app.route('/catalog/<category_title>/<item_title>/JSON')
-def itemJSON():
+def itemJSON(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
            title=item_title).one()
-    return jsonify(item)
+    return jsonify(item.serialize)
 
 
 if __name__ == '__main__':
