@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, select
 
 Base = declarative_base()
 
+
 class User(Base):
     __tablename__ = 'user'
 
@@ -27,7 +28,7 @@ class Category(Base):
         return {
             'id': self.id,
             'title': self.title,
-            'item':[item.serialize for item in self.items]
+            'item': [item.serialize for item in self.items]
         }
 
 
@@ -36,17 +37,17 @@ class CategoryItem(Base):
 
     id = Column(Integer, primary_key=True)
     creation_date = Column(DateTime, default=func.now())
-    last_updated = Column (DateTime, default=func.now())
+    last_updated = Column(DateTime, default=func.now())
     title = Column(String(80), nullable=False)
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey('category.id'))
-    category = relationship (Category, back_populates="items")
+    category = relationship(Category, back_populates="items")
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
-    category_name= column_property (
-        select([Category.title]).\
-        where(Category.id==category_id).\
+    category_name = column_property(
+        select([Category.title]).
+        where(Category.id == category_id).
         correlate_except(Category))
 
     @property

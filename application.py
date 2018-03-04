@@ -15,7 +15,8 @@ import httplib2
 import random
 import string
 import requests
-import datetime, time
+import datetime
+import time
 
 
 app = Flask(__name__)
@@ -84,8 +85,8 @@ def gconnect():
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(json.dumps('Current user is already connected.'),
-                                 200)
+        response = make_response(json.dumps(
+                                'Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -123,7 +124,8 @@ def gconnect():
 
 # Add user based on current session
 def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session['email'])
+    newUser = User(name=login_session['username'],
+                   email=login_session['email'])
     db_session.add(newUser)
     db_session.commit()
     user = db_session.query(User).filter_by(email=login_session['email']).one()
@@ -141,8 +143,6 @@ def getUserID(email):
     try:
         user = db_session.query(User).filter_by(email=email).one()
         return user.id
-    except:
-        return None
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
@@ -163,7 +163,8 @@ def gdisconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
     else:
-        response = make_response(json.dumps('Failed to revoke token for given user.', 400))
+        response = make_response(json.dumps(
+                   'Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -191,13 +192,13 @@ def disconnect():
 @app.route('/')
 @app.route('/catalog')
 def showAllCategories():
-# Display all categories in ascending order
+    # Display all categories in ascending order
     categories = db_session.query(Category).order_by(asc(Category.title))
     recent_items = db_session.query(CategoryItem).order_by(
                    desc(CategoryItem.last_updated)).limit(7).all()
     return render_template('mainCatalog.html',
-                            categories=categories,
-                            recent_items=recent_items)
+                           categories=categories,
+                           recent_items=recent_items)
 
 
 # Display the catalog for a given category
@@ -208,8 +209,8 @@ def showCategoryCatalog(category_title):
     items = db_session.query(CategoryItem).filter_by(
             category_id=category.id).order_by(asc(CategoryItem.title))
     return render_template('categoryCatalog.html',
-                            categories=categories,
-                            items=items, category=category)
+                           categories=categories,
+                           items=items, category=category)
 
 
 # Display the details for a specific item
@@ -217,11 +218,12 @@ def showCategoryCatalog(category_title):
 def showItemDetails(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
-           title=item_title).one()
-    if 'username' not in login_session or item.user_id != login_session['user_id']:
-        return render_template('itemDetails_public.html',item=item)
+                                                    title=item_title).one()
+    if 'username' not in login_session
+    or item.user_id != login_session['user_id']:
+        return render_template('itemDetails_public.html', item=item)
     else:
-        return render_template('itemDetails.html',item=item)
+        return render_template('itemDetails.html', item=item)
 
 
 # Edit a Category Item
@@ -229,25 +231,32 @@ def showItemDetails(category_title, item_title):
 def editItem(item_title):
     if 'username' not in login_session:
         return redirect(urlfor('showAllCategories'))
-    editedItem = db_session.query(CategoryItem).filter_by(title=item_title).one()
+    editedItem = db_session.query(CategoryItem).filter_by(
+                 title=item_title).one()
     if edited.user_id != login_session['user_id']:
-        redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
+        redirect(urlfor('showItemDetails', item_title,
+                        itemToDelete.category_name))
     if request.method == 'POST':
         if request.form['item_title']:
             editedItem.title = request.form['item_title']
         if request.form['description']:
             editedItem.description = request.form['description']
         if request.form['category_title'] != editedItem.category_name:
-            newCategory = db_session.query(Category).filter_by(title=request.form['category_title']).one()
+            newCategory = db_session.query(Category).filter_by(
+                          title=request.form['category_title']).one()
             editedItem.category_id = newCategory.id
             editItem.category = newCategory
         db_session.add(editedItem)
         db_session.commit()
         flash('%s Successfully Edited' % editedItem.title)
-        return redirect(url_for("showItemDetails", category_title=editedItem.category_name, item_title=editedItem.title))
+        return redirect(url_for("showItemDetails",
+                        category_title=editedItem.category_name,
+                        item_title=editedItem.title))
     else:
         categories = db_session.query(Category).order_by(asc(Category.title))
-        return render_template('editCategoryItem.html', item=editedItem, categories=categories)
+        return render_template('editCategoryItem.html',
+                               item=editedItem,
+                               categories=categories)
 
 
 # Edit a Category Item
@@ -255,9 +264,11 @@ def editItem(item_title):
 def deleteItem(item_title):
     if 'username' not in login_session:
         return redirect(urlfor('showAllCategories'))
-    itemToDelete = db_session.query(CategoryItem).filter_by(title=item_title).one()
+    itemToDelete = db_session.query(CategoryItem).filter_by(
+                   title=item_title).one()
     if itemToDelete.user_id != login_session['user_id']:
-        redirect (urlfor('showItemDetails',item_title, itemToDelete.category_name))
+        redirect(urlfor('showItemDetails', item_title,
+                        itemToDelete.category_name))
     if request.method == 'POST':
         db_session.delete(itemToDelete)
         db_session.commit()
@@ -265,7 +276,9 @@ def deleteItem(item_title):
         return redirect(url_for('showAllCategories'))
     else:
         categories = db_session.query(Category).order_by(asc(Category.title))
-        return render_template('deleteCategoryItem.html', item=itemToDelete, categories=categories)
+        return render_template('deleteCategoryItem.html',
+                               item=itemToDelete,
+                               categories=categories)
 
 
 # Create a new Category Item
@@ -275,17 +288,21 @@ def newItem():
         return redirect(urlfor('showAllCategories'))
     # POST - Create new item and redirect back to the Catalog
     if request.method == 'POST':
-        item = db_session.query(CategoryItem).filter_by(title=request.form['item_title']).scalar()
+        item = db_session.query(CategoryItem).filter_by(
+               title=request.form['item_title']).scalar()
         if (item):
-            return "<script>function myFunction() {alert('Name already taken. Please select a new name.'); window.history.back();} </script><body onload='myFunction()'>"
+            return """<script>function myFunction() {
+                        alert('Name already taken. Please select a new name.');
+                        window.history.back();}
+                    </script><body onload='myFunction()'>"""
         else:
-            category = db_session.query(Category).filter_by(title=request.form['category_title']).one()
-            newItem = CategoryItem(
-                last_updated = datetime.datetime.now(),
-                title = request.form['item_title'],
-                description = request.form['description'],
-                category_id = category.id,
-                user_id = login_session['user_id'])
+            category = db_session.query(Category).filter_by(
+                       title=request.form['category_title']).one()
+            newItem = CategoryItem(last_updated=datetime.datetime.now(),
+                                   title=request.form['item_title'],
+                                   description=request.form['description'],
+                                   category_id=category.id,
+                                   user_id=login_session['user_id'])
             db_session.add(newItem)
             db_session.commit()
             return redirect(url_for('showAllCategories'))
@@ -295,27 +312,27 @@ def newItem():
         return render_template('newCategoryItem.html', categories=categories)
 
 
-#JSON Support
+# JSON Support
 @app.route('/catalog/JSON')
 def catalogJSON():
     categories = db_session.query(Category).all()
-    catalog = {'Category':[category.serialize for category in categories]}
+    catalog = {'Category': [category.serialize for category in categories]}
     return jsonify(catalog)
 
 
-#JSON support for categories
+# JSON support for categories
 @app.route('/catalog/<category_title>/JSON')
 def categoryJSON(category_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
-    return jsonify (category.serialize)
+    return jsonify(category.serialize)
 
 
-#JSON support for individual items
+# JSON support for individual items
 @app.route('/catalog/<category_title>/<item_title>/JSON')
 def itemJSON(category_title, item_title):
     category = db_session.query(Category).filter_by(title=category_title).one()
     item = db_session.query(CategoryItem).filter_by(category_id=category.id,
-           title=item_title).one()
+                                                    title=item_title).one()
     return jsonify(item.serialize)
 
 
