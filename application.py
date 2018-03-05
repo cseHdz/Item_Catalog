@@ -232,11 +232,11 @@ def showItemDetails(category_title, item_title):
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def editItem(item_title):
     if 'username' not in login_session:
-        return redirect(urlfor('showAllCategories'))
+        return redirect(url_for('showAllCategories'))
     editedItem = db_session.query(CategoryItem).filter_by(
                  title=item_title).one()
-    if edited.user_id != login_session['user_id']:
-        redirect(urlfor('showItemDetails', item_title,
+    if editedItem.user_id != login_session['user_id']:
+        redirect(url_for('showItemDetails', item_title,
                         itemToDelete.category_name))
     if request.method == 'POST':
         if request.form['item_title']:
@@ -265,11 +265,11 @@ def editItem(item_title):
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def deleteItem(item_title):
     if 'username' not in login_session:
-        return redirect(urlfor('showAllCategories'))
+        return redirect(url_for('showAllCategories'))
     itemToDelete = db_session.query(CategoryItem).filter_by(
                    title=item_title).one()
     if itemToDelete.user_id != login_session['user_id']:
-        redirect(urlfor('showItemDetails', item_title,
+        redirect(url_for('showItemDetails', item_title,
                         itemToDelete.category_name))
     if request.method == 'POST':
         db_session.delete(itemToDelete)
@@ -287,7 +287,7 @@ def deleteItem(item_title):
 @app.route('/catalog/newItem', methods=['GET', 'POST'])
 def newItem():
     if 'username' not in login_session:
-        return redirect(urlfor('showAllCategories'))
+        return redirect(url_for('showAllCategories'))
     # POST - Create new item and redirect back to the Catalog
     if request.method == 'POST':
         item = db_session.query(CategoryItem).filter_by(
