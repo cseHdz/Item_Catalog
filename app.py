@@ -21,11 +21,9 @@ import config
 
 
 app = Flask(__name__)
-app.config.from_object(import.Config)
-
 
 # Connect to Item Catalog DB
-engine = create_engine('postgresql:///catalog)
+engine = create_engine('postgresql:///catalog')
 Base.metadata.bind = engine
 
 
@@ -343,4 +341,6 @@ def itemJSON(category_title, item_title):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
+    app.debug = True
     app.run()
