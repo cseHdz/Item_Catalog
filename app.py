@@ -17,22 +17,26 @@ import string
 import requests
 import datetime
 import time
+import config
 
 
 app = Flask(__name__)
-
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
-APP_NAME = "Item Catalog App"
+app.config.from_object(import.Config)
 
 
 # Connect to Item Catalog DB
-engine = create_engine('sqlite:///item_catalog.db')
+engine = create_engine('postgresql:///catalog)
 Base.metadata.bind = engine
+
 
 # Start database session
 DBSession = sessionmaker(bind=engine)
 db_session = DBSession()
+
+
+CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_id']
+APP_NAME = "Item Catalog App"
 
 
 # Enable google login
@@ -339,6 +343,4 @@ def itemJSON(category_title, item_title):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
-    app.debug = True
     app.run(host='0.0.0.0', port=8000)
