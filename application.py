@@ -22,10 +22,17 @@ import psycopg2
 
 
 app = Flask(__name__)
+app.config.from_object(import.Config)
+
 
 # Connect to Item Catalog DB
+<<<<<<< HEAD:application.py
 engine = create_engine('postgresql:///catalog')
 =======
+=======
+engine = create_engine('postgresql:///catalog)
+Base.metadata.bind = engine
+>>>>>>> parent of f79987e... WSGI Errors:app.py
 
 
 app = Flask(__name__)
@@ -349,9 +356,12 @@ def itemJSON(category_title, item_title):
 
 if __name__ == '__main__':
 <<<<<<< HEAD:application.py
+<<<<<<< HEAD:application.py
     app.secret_key = 'super_secret_key'
     app.debug = True
 <<<<<<< HEAD:app.py
+=======
+>>>>>>> parent of f79987e... WSGI Errors:app.py
     app.run()
 =======
     app.run(host='0.0.0.0', port=8000)
