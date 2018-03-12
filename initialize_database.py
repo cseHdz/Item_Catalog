@@ -3,7 +3,11 @@ from sqlalchemy.orm import sessionmaker
 
 from database_setup import Base, Category, CategoryItem, User
 
+<<<<<<< HEAD
 engine = create_engine('postgresql:///catalog')
+=======
+engine = create_engine('sqlite:///item_catalog.db')
+>>>>>>> parent of c553022... Updates to PSQL Connection
 
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)

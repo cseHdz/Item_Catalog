@@ -348,6 +348,7 @@ def itemJSON(category_title, item_title):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD:application.py
     app.secret_key = 'super_secret_key'
     app.debug = True
 <<<<<<< HEAD:app.py
@@ -355,3 +356,6 @@ if __name__ == '__main__':
 =======
     app.run(host='0.0.0.0', port=8000)
 >>>>>>> parent of 766bfde... Enabled WSGI, PostgreSQL functionality:application.py
+=======
+    app.run(host='0.0.0.0', port=8000)
+>>>>>>> parent of c553022... Updates to PSQL Connection:app.py
