@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, column_property
 from sqlalchemy import create_engine, select
-
+import psycopg2
 
 Base = declarative_base()
 
