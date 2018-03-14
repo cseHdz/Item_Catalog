@@ -6,3 +6,4 @@ sys.path.insert(0, '/var/www/html/')
 
 
 from Item_Catalog import app as application
+from Item_Catalog import *
