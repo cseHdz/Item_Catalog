@@ -27,7 +27,7 @@ engine = create_engine('postgresql:///catalog')
 Base.metadata.bind = engine
 
 with app.open_resource('client_secrets.json') as f:
-    secrets = f.read()
+    secrets = f.read().decode('utf-8')
     CLIENT_ID = json.loads(secrets)['web']['client_id']
 
 APP_NAME = "Item Catalog App"
