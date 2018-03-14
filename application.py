@@ -22,15 +22,14 @@ import config
 
 
 app = Flask(__name__)
-app.config.from_object(import.Config)
 
 # Connect to Item Catalog DB
 engine = create_engine('postgresql:///catalog)
 Base.metadata.bind = engine
 
+
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-
 APP_NAME = "Item Catalog App"
 
 Base.metadata.bind = engine
