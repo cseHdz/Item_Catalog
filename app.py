@@ -28,7 +28,7 @@ Base.metadata.bind = engine
 
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open('Item_Catalog/client_secrets.json', 'r').read())['web']['client_id']
 APP_NAME = "Item Catalog App"
 
 Base.metadata.bind = engine
