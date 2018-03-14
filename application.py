@@ -18,7 +18,6 @@ import requests
 import datetime
 import time
 import psycopg2
-import config
 
 
 app = Flask(__name__)
