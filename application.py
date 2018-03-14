@@ -24,7 +24,7 @@ import config
 app = Flask(__name__)
 
 # Connect to Item Catalog DB
-engine = create_engine('postgresql:///catalog)
+engine = create_engine('postgresql:///catalog')
 Base.metadata.bind = engine
 
 
