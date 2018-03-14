@@ -26,9 +26,8 @@ app = Flask(__name__)
 engine = create_engine('postgresql:///catalog')
 Base.metadata.bind = engine
 
-with app.open_resource('client_secrets.json') as secrets: 
-    str_secrets = secrets.decode('utf-8')
-    CLIENT_ID = json.loads(str_secrets)['web']['client_id']
+with app.open_resource('client_secrets.json') as secrets:
+    CLIENT_ID = json.loads(secrets)['web']['client_id']
 
 APP_NAME = "Item Catalog App"
 
