@@ -50,6 +50,7 @@ def gconnect():
 
     try:
         # Upgrade the authorization code into a credentials object
+        secrets = os.path.join(PROJECT_ROOT, 'client_secrets.json')
         oauth_flow = flow_from_clientsecrets(secrets, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
