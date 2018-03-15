@@ -44,8 +44,11 @@ db_session = DBSession()
 # Enable google login
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
-    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                    for x in range(32))
+    state = ''
+    for i in repeat(None, 32):
+        state = state.join(
+                random.choice(string.ascii_uppercase + string.digits))
+
     login_session['state'] = state
     code = request.data
 
