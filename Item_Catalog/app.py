@@ -2,6 +2,7 @@
 #
 # Item catalog Flask application
 
+from six.moves import xrange
 from flask import Flask, render_template, request, redirect, url_for
 from flask import make_response, jsonify, flash
 from flask import session as login_session
@@ -347,4 +348,5 @@ def itemJSON(category_title, item_title):
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
+    app.debug = True
     app.run()
