@@ -18,16 +18,18 @@ import requests
 import datetime
 import time
 import psycopg2
-
+import os
 
 app = Flask(__name__)
+
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 # Connect to Item Catalog DB
 engine = create_engine('postgresql:///catalog')
 Base.metadata.bind = engine
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+secrets = os.path.join(PROJECT_ROOT, 'client_secrets.json')
+CLIENT_ID = json.loads(open(secrets, 'r').read())['web']['client_id']
 
 APP_NAME = "Item Catalog App"
 
