@@ -52,6 +52,7 @@ def gconnect():
         # Upgrade the authorization code into a credentials object
         secrets = os.path.join(PROJECT_ROOT, 'client_secrets.json')
         oauth_flow = flow_from_clientsecrets(secrets, scope='')
+
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -344,5 +345,4 @@ def itemJSON(category_title, item_title):
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
-    app.debug = True
     app.run()
