@@ -49,6 +49,7 @@ def gconnect():
 
     login_session['state'] = state
     code = request.data
+    print code
 
     try:
     # Upgrade the authorization code into a credentials object
