@@ -66,6 +66,7 @@ def gconnect():
            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
+    
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         return jsonify (json.dumps(result.get('error'))), 500
@@ -79,10 +80,8 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         return jsonify ("Token's client ID does not match app's."), 401
 
-    print loggin_session
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
-    print loggin_session
 
     if stored_access_token is not None and gplus_id == stored_gplus_id:
         return jsonify ("Current user is already connected."), 200
