@@ -27,7 +27,10 @@
         success: function(result) {
           // Handle or verify the server response if necessary.
           if (result) {
-              window.location.href = "/catalog";;
+            $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+            setTimeout(function() {
+            window.location.href = "/catalog";
+            }, 4000);
           } else if (authResult['error']) {
             console.log('There was an error: ' + authResult['error']);
           } else {
