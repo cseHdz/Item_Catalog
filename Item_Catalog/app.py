@@ -5,7 +5,6 @@
 from six.moves import xrange
 from flask import Flask, render_template, request, redirect, url_for
 from flask import make_response, jsonify, flash
-from flask import session as login_session
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from Item_Catalog.database_setup import Base, Category, CategoryItem, User
@@ -66,7 +65,7 @@ def gconnect():
            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
-    
+
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         return jsonify (json.dumps(result.get('error'))), 500
