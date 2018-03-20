@@ -79,10 +79,10 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         return jsonify ("Token's client ID does not match app's."), 401
 
-    print logging_session
+    print loggin_session
     stored_access_token = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
-    print logging_session
+    print loggin_session
 
     if stored_access_token is not None and gplus_id == stored_gplus_id:
         return jsonify ("Current user is already connected."), 200
