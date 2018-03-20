@@ -51,12 +51,12 @@ def gconnect():
     code = request.data
 
     #try:
-        # Upgrade the authorization code into a credentials object
-        secrets = os.path.join(PROJECT_ROOT, 'client_secrets.json')
-        oauth_flow = flow_from_clientsecrets(secrets, scope='')
+    # Upgrade the authorization code into a credentials object
+    secrets = os.path.join(PROJECT_ROOT, 'client_secrets.json')
+    oauth_flow = flow_from_clientsecrets(secrets, scope='')
 
-        oauth_flow.redirect_uri = 'postmessage'
-        credentials = oauth_flow.step2_exchange(code)
+    oauth_flow.redirect_uri = 'postmessage'
+    credentials = oauth_flow.step2_exchange(code)
     #except FlowExchangeError:
     #    response = make_response(
     #        json.dumps('Failed to upgrade the authorization code.'), 401)
