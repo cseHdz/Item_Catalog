@@ -48,9 +48,7 @@ def gconnect():
                     for i in xrange(32))
 
     login_session['state'] = state
-    logging.debug(state)
     code = request.data
-    logging.debug(code)
 
     try:
     # Upgrade the authorization code into a credentials object
