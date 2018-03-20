@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask import make_response, jsonify, flash
 from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
+from flask import session as login_session
 from Item_Catalog.database_setup import Base, Category, CategoryItem, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
