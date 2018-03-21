@@ -1,7 +1,7 @@
 {% extends "catalog.html" %}
 
 {% block list %}
-  {% if 'username' in login_session %}
+  {% if 'username' in session %}
     <div class="row padding-left">
       <a href = "{{url_for("newItem")}}">
         <h3 class="center-vertical">Add Item</h3>
